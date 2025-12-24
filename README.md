@@ -17,6 +17,8 @@ Adequate workplace illumination is a fundamental occupational safety requirement
 
 Publicly available OSHA inspection and violation datasets provide an opportunity to examine how often illumination-related hazards are identified, penalized, and distributed across industries over time.
 
+Raw OSHA inspection and violation data are not redistributed in this repository and must be obtained directly from OSHA’s public data portals.
+
 ---
 
 ## Data Sources
@@ -40,24 +42,53 @@ The raw data files are not redistributed in this repository and must be obtained
 ## Repository Structure
 ```
 
-scripts/
-├── extract_low_lighting_osha.py
-├── illumination_by_sector.py
-├── plot_illumination_trends.py
+Repository Structure
+├── scripts/
+│   ├── extract_low_lighting_osha.py
+│   │   Rule-based text mining of OSHA violation records to identify
+│   │   plausibly illumination-related violations (low light, visibility,
+│   │   emergency egress).
+│   │
+│   ├── illumination_by_sector.py
+│   │   Aggregates illumination-related violations by NAICS sector and year.
+│   │
+│   ├── plot_illumination_trends.py
+│   │   Generates time-series plots of violation counts and penalties.
+│   │
+│   ├── violation_lighting_search.py
+│   │   Exploratory keyword-based search script used during early
+│   │   development and validation.
+│   │
+│   └── README.md
+│       Script-specific usage notes.
+│
+├── outputs/
+│   ├── illumination_by_sector*.csv
+│   │   Intermediate sector-level summaries generated in batches
+│   │   (used to construct merged sector and trend datasets).
+│   │
+│   ├── illumination_stats_by_year_merged.csv
+│   │   Final annual summary used in analysis and manuscript.
+│   │
+│   └── README.md
+│       Description of generated datasets.
+│
+├── figures/
+│   ├── OSHA_illumination_related_violations_per_year.png
+│   │   Annual counts of illumination-related OSHA violations.
+│   │
+│   ├── Total_OSHA_penalties_for_lighting_violations_per_year.png
+│   │   Inflation-unadjusted total penalties by year.
+│   │
+│   └── README.md
+│       Figure descriptions.
+│
+├── README.md
+│   Project overview, methods, and data provenance.
+│
+├── LICENSE
+└── .gitignore
 
-outputs/
-├── summary_by_year.csv # Used in manuscript
-├── illumination_by_sector*.csv # Used in manuscript
-├── filtered_records.csv # Exploratory (low yield)
-├── summary_by_tag.csv # Exploratory
-
-figures/
-├── OSHA_illumination_related_violations_per_year.png
-├── Total_OSHA_penalties_for_lighting_violations_per_year.png
-
-README.md
-LICENSE
-.gitignore
 
 ```
 ---
