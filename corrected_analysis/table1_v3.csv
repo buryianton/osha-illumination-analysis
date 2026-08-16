@@ -1,0 +1,15 @@
+level,category,standard_label,violations,median_initial_penalty,total_initial_penalty,pct_zero_penalty
+standard,construction illumination,29 CFR 1926.26,326,0.0,114462.0,59.20245398773007
+standard,construction illumination,29 CFR 1926.56,2483,0.0,902842.0,61.941200161095445
+standard,exit route lighting,29 CFR 1910.36(b)(6) [old numbering],2993,0.0,733444.5,74.2064817908453
+standard,exit route lighting,29 CFR 1910.37(b)(1) [2003-],1834,0.0,1525596.5,68.64776444929117
+standard,exit sign illumination,29 CFR 1910.37(b)(6) [2003-],3921,0.0,1818872.5,78.70441213976027
+standard,exit sign illumination,29 CFR 1910.37(q)(6) [old numbering],5646,0.0,389396.18,89.85122210414453
+standard,exit sign illumination,29 CFR 1910.37(q)(7) [old numbering],93,0.0,14105.0,82.79569892473118
+standard,maritime lighting,29 CFR 1915.82,204,0.0,152883.0,62.745098039215684
+standard,maritime lighting,29 CFR 1917.123,33,150.0,47020.0,48.484848484848484
+standard,maritime lighting,29 CFR 1918.92,89,0.0,71913.0,56.17977528089888
+category,construction illumination,(all standards in category),2809,0.0,1017304.0,61.62335350658598
+category,exit route lighting,(all standards in category),4827,0.0,2259041.0,72.094468614046
+category,exit sign illumination,(all standards in category),9660,0.0,2222373.68,85.25879917184265
+category,maritime lighting,(all standards in category),326,0.0,271816.0,59.50920245398773
