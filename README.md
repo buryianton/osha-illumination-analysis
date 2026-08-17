@@ -129,6 +129,12 @@ The repository generates the following primary outputs:
 
 ---
 
+## Key Result
+
+17,622 illumination-related violations (0.14% of 13.05 million), 7,962 for work-area and route lighting; annual share 0.06–0.22%; median penalty $0.
+
+See `corrected_analysis/` for the current (v3) analysis and `CHANGELOG.md` for the revision history.
+
 ## Interpretation Notes
 
 - OSHA records do not include measured illuminance (lux) values.
