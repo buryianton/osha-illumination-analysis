@@ -281,17 +281,23 @@ plt.rcParams.update({
 })
 
 CAT_LABELS = {
-    "exit route lighting":
-        "Exit route lighting - 29 CFR 1910.36(b)(6) old numbering / 1910.37(b)(1) 2003-",
-    "exit sign illumination":
-        "Exit sign illumination - 29 CFR 1910.37(q)(6)-(q)(7) old numbering / 1910.37(b)(6) 2003-",
-    "construction illumination":
-        "Construction illumination - 29 CFR 1926.56 and 1926.26",
-    "maritime lighting":
-        "Maritime lighting - 29 CFR 1915.82, 1917.123, 1918.92",
+    "exit route lighting": "Exit route lighting",
+    "exit sign illumination": "Exit sign illumination",
+    "construction illumination": "Construction illumination",
+    "maritime lighting": "Maritime lighting",
 }
 CAT_ORDER = ["exit route lighting", "exit sign illumination",
              "construction illumination", "maritime lighting"]
+
+RECODIFICATION_X = 2002.5  # Subpart E recodification, effective Dec 9, 2002
+
+
+def mark_recodification(ax):
+    """Thin grey dashed vertical line + small annotation at the 2003 era split."""
+    ax.axvline(RECODIFICATION_X, color="grey", linestyle="--", linewidth=0.8)
+    ax.text(RECODIFICATION_X - 0.7, ax.get_ylim()[1] * 0.98,
+            "Subpart E recodification (Dec 2002)",
+            rotation=90, ha="right", va="top", fontsize=7.5, color="grey")
 
 cat_annual = (illum.groupby(["year", "category"]).size().unstack(fill_value=0)
               .reindex(range(YEAR_MIN, YEAR_MAX + 1), fill_value=0)
@@ -305,7 +311,9 @@ plt.title(f"Annual Counts of OSHA Illumination-Related Violations by Category, "
           f"{YEAR_MIN}-{YEAR_MAX}")
 plt.xlabel("Year")
 plt.ylabel("Number of violations")
-plt.legend(fontsize=8, loc="upper right", frameon=False)
+mark_recodification(plt.gca())
+plt.legend(fontsize=9, loc="upper center", bbox_to_anchor=(0.5, -0.12),
+           ncol=4, frameon=False)
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(fig1_path, bbox_inches="tight")
@@ -321,6 +329,8 @@ plt.title(f"Illumination-Related Violations as a Share of All OSHA Violations, "
           f"{YEAR_MIN}-{YEAR_MAX}")
 plt.xlabel("Year")
 plt.ylabel("Share of all OSHA violations (%)")
+plt.ylim(bottom=0)
+mark_recodification(plt.gca())
 plt.legend(fontsize=9, frameon=False)
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
