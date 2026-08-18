@@ -1,11 +1,13 @@
 # osha-illumination-analysis
 
-This repository contains Python scripts and derived datasets for a descriptive analysis of illumination-related enforcement actions recorded in the U.S. Occupational Safety and Health Administration (OSHA) inspection and violation databases.
+This repository contains Python scripts and derived datasets for a descriptive analysis of illumination-related enforcement actions recorded in the U.S. Occupational Safety and Health Administration (OSHA) violation database, 1972–2024.
 
-The analysis focuses on long-term trends (1972–present) in:
+The analysis examines long-term trends in:
 - The number of illumination-related OSHA violations
+- Their share of all OSHA enforcement activity
 - Monetary penalties associated with lighting deficiencies
-- Distribution of violations across industry sectors
+
+Illumination-related violations are identified by matching cited citation codes to lighting-specific CFR provisions, with era-specific mapping across OSHA's December 2002 recodification of 29 CFR Part 1910 Subpart E. No industry-sector analysis is performed: the raw violation files contain no NAICS/SIC codes.
 
 This work is intended to support occupational and environmental health research and is suitable for use in regulatory surveillance, exposure assessment, and policy analysis contexts.
 
@@ -13,11 +15,9 @@ This work is intended to support occupational and environmental health research 
 
 ## Background
 
-Adequate workplace illumination is a fundamental occupational safety requirement, influencing visual performance, accident risk, and overall worker health. While OSHA standards specify minimum illumination requirements for certain tasks and environments (e.g., 29 CFR 1910.37, 1926.56), comprehensive assessments of enforcement patterns related to lighting deficiencies are limited.
+Adequate workplace illumination is a fundamental occupational safety requirement, influencing visual performance, accident risk, and overall worker health. While OSHA standards specify minimum illumination requirements for certain tasks and environments (e.g., 29 CFR 1910.37(b), 1926.56), comprehensive assessments of enforcement patterns related to lighting deficiencies are limited.
 
-Publicly available OSHA inspection and violation datasets provide an opportunity to examine how often illumination-related hazards are identified, penalized, and distributed across industries over time.
-
-Raw OSHA inspection and violation data are not redistributed in this repository and must be obtained directly from OSHA’s public data portals.
+Publicly available OSHA violation datasets provide an opportunity to examine how often illumination-related hazards are cited and penalized over time.
 
 ---
 
@@ -27,105 +27,42 @@ Primary data source:
 U.S. Department of Labor, OSHA Enforcement Data.
 https://enforcedata.dol.gov/views/data_summary.php
 
-Publicly available OSHA inspection and violation datasets were downloaded directly from the Department of Labor enforcement data portal. Data files were accessed in CSV format and processed locally.
+- **OSHA Violation Data** (`osha_violation0.csv` … `osha_violation13.csv`)
+  Records of cited violations, associated standards, penalty amounts, and issuance dates (~13 million records).
 
-- **OSHA Violation Data**  
-  Records of cited violations, associated standards, penalty amounts, and inspection dates.
-
-- **OSHA Inspection Data**  
-  Records of inspections, industry classification (NAICS), and inspection characteristics.
-
-The raw data files are not redistributed in this repository and must be obtained directly from OSHA’s public data portals.
+The raw data files are not redistributed in this repository and must be obtained directly from OSHA's public data portals. OSHA inspection data (which carry industry codes) are not used in the current analysis.
 
 ---
 
 ## Repository Structure
-```
 
-Repository Structure
-├── scripts/
-│   ├── extract_low_lighting_osha.py
-│   │   Rule-based text mining of OSHA violation records to identify
-│   │   plausibly illumination-related violations (low light, visibility,
-│   │   emergency egress).
-│   │
-│   ├── illumination_by_sector.py
-│   │   Aggregates illumination-related violations by NAICS sector and year.
-│   │
-│   ├── plot_illumination_trends.py
-│   │   Generates time-series plots of violation counts and penalties.
-│   │
-│   ├── violation_lighting_search.py
-│   │   Exploratory keyword-based search script used during early
-│   │   development and validation.
-│   │
-│   └── README.md
-│       Script-specific usage notes.
-│
-├── outputs/
-│   ├── illumination_by_sector*.csv
-│   │   Intermediate sector-level summaries generated in batches
-│   │   (used to construct merged sector and trend datasets).
-│   │
-│   ├── illumination_stats_by_year_merged.csv
-│   │   Final annual summary used in analysis and manuscript.
-│   │
-│   └── README.md
-│       Description of generated datasets.
-│
-├── figures/
-│   ├── OSHA_illumination_related_violations_per_year.png
-│   │   Annual counts of illumination-related OSHA violations.
-│   │
-│   ├── Total_OSHA_penalties_for_lighting_violations_per_year.png
-│   │   Inflation-unadjusted total penalties by year.
-│   │
-│   └── README.md
-│       Figure descriptions.
-│
+```
+├── corrected_analysis/     Current (v3) analysis — script, outputs, figures,
+│                           and a README documenting all corrections
+├── CHANGELOG.md            Revision history (v1.0 → v3.0)
+├── scripts/                Legacy v1 keyword-based exploration (superseded)
+├── outputs/                Legacy v1 outputs (superseded)
+├── figures/                Legacy v1 figures (superseded)
 ├── README.md
-│   Project overview, methods, and data provenance.
-│
 ├── LICENSE
 └── .gitignore
-
-
 ```
+
+The `scripts/`, `outputs/`, and `figures/` directories contain the initial keyword-based exploratory analysis and are retained for transparency only; their results are superseded by `corrected_analysis/`.
+
 ---
 
 ## Methods Overview
 
-The analysis uses a rule-based text mining approach combined with regulatory standard codes to identify records plausibly related to insufficient or inadequate illumination.
+The current (v3) analysis is code-based matching of CFR provisions — no text mining or keyword screening is used.
 
-Key steps include:
-1. Parsing violation narrative and citation text fields
-2. Identifying illumination-related records using keyword patterns and CFR references
-3. Classifying records into lighting-related categories
-4. Aggregating violations and penalties by year and industry sector
-5. Producing descriptive statistics and time-series visualizations
+Key steps:
+1. Clean each cited standard code (uppercase, strip non-alphanumerics)
+2. Match against lighting-specific provisions, era-specific across the December 2002 Subpart E recodification: old §1910.36(b)(6) / §1910.37(q)(6)–(7) and current §1910.37(b)(1) / (b)(6), plus §1926.26, §1926.56 (construction) and §1915.82, §1917.123, §1918.92 (maritime)
+3. Classify records into four categories (exit route lighting, exit sign illumination, construction illumination, maritime lighting) and a strict work-area/route-lighting subset
+4. Aggregate counts, shares, and penalties by year, 1972–2024
 
-No predictive modeling or causal inference is performed.
-
----
-
-## Outputs
-
-The repository generates the following primary outputs:
-
-- **filtered_records.csv**  
-  OSHA violation records plausibly related to illumination deficiencies.
-
-- **summary_by_year.csv**  
-  Annual counts of illumination-related violations.
-
-- **summary_by_tag.csv**  
-  Distribution of violation categories (e.g., explicit low light, visibility hazards).
-
-- **illumination_by_sector*.csv**  
-  Industry-specific summaries based on NAICS classifications.
-
-- **Figures**  
-  Time-series plots of violation counts and total penalties per year.
+See `corrected_analysis/README.md` for full methodological detail. No predictive modeling or causal inference is performed.
 
 ---
 
@@ -145,15 +82,15 @@ See `corrected_analysis/` for the current (v3) analysis and `CHANGELOG.md` for t
 
 ## Reproducibility
 
-All analyses are performed using Python (pandas, matplotlib).  
-Scripts are designed to be run sequentially on raw OSHA CSV files.
+All analyses are performed using Python (pandas, matplotlib).
 
-Example:
 ```bash
-python extract_low_lighting_osha.py --input osha_violation*.csv --output_dir outputs
+python corrected_analysis/violations_count_v3.py
+```
+
+The script is self-contained: it reads the raw `osha_violation0..13.csv` files (placed in the directory configured at the top of the script) in a single memory-safe pass and writes all tables and figures to `corrected_analysis/`.
 
 ## Citation
+
 If you use this code or analysis, please cite:
-Buryi, A. (2025). Analysis of OSHA illumination-related enforcement data (1972–present).
-
-
+Buryi, A. (2026). Analysis of OSHA illumination-related enforcement data (1972–2024).
